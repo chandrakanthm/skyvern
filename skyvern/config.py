@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     JSON_LOGGING: bool = False
     LOG_LEVEL: str = "INFO"
     PORT: int = 8000
-    ALLOWED_ORIGINS: list[str] = ["*"]
+    ALLOWED_ORIGINS: list[str] = ["*", "http://localhost:3000", "http://0.0.0.0:8080", "http://localhost:8080","http://0.0.0.0:8000"]
 
     # Secret key for JWT. Please generate your own secret key in production
     SECRET_KEY: str = "RX1NvhujcJqBPi8O78-7aSfJEWuT86-fll4CzKc_uek"
@@ -76,6 +76,7 @@ class Settings(BaseSettings):
     ENABLE_ANTHROPIC: bool = False
     ENABLE_AZURE: bool = False
     ENABLE_BEDROCK: bool = False
+    ENABLE_OLLAMA: bool = False
     # OPENAI
     OPENAI_API_KEY: str | None = None
     # ANTHROPIC
@@ -85,6 +86,9 @@ class Settings(BaseSettings):
     AZURE_API_KEY: str | None = None
     AZURE_API_BASE: str | None = None
     AZURE_API_VERSION: str | None = None
+    # OLLAMA
+    OLLAMA_BASE_URL: str = "http://localhost:11434"
+
 
     def is_cloud_environment(self) -> bool:
         """

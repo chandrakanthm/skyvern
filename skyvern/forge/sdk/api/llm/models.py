@@ -11,6 +11,7 @@ class LLMConfig:
     required_env_vars: list[str]
     supports_vision: bool
     add_assistant_prefix: bool
+    base_url: str
 
     def get_missing_env_vars(self) -> list[str]:
         missing_env_vars = []
@@ -20,7 +21,7 @@ class LLMConfig:
                 missing_env_vars.append(env_var)
 
         return missing_env_vars
-
+             
 
 @dataclass(frozen=True)
 class LLMRouterModelConfig:
