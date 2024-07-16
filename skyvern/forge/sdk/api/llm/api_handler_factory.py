@@ -13,7 +13,7 @@ from skyvern.forge.sdk.api.llm.exceptions import (
     InvalidLLMConfigError,
     LLMProviderError,
 )
-from skyvern.forge.sdk.api.llm.models import LLMAPIHandler, LLMRouterConfig
+from skyvern.forge.sdk.api.llm.models import LLMAPIHandler, LLMRouterConfig, LLMConfig
 from skyvern.forge.sdk.api.llm.utils import llm_messages_builder, parse_api_response
 from skyvern.forge.sdk.artifact.models import ArtifactType
 from skyvern.forge.sdk.models import Step
@@ -144,6 +144,8 @@ class LLMAPIHandlerFactory:
 
         if LLMConfigRegistry.is_router_config(llm_key):
             return LLMAPIHandlerFactory.get_llm_api_handler_with_router(llm_key)
+        # elif LLMConfigRegistry.is_ollama_config(llm_key):
+        #     return LLMAPIHandlerFactory.get_ollama_api_handler(llm_key)
 
         async def llm_api_handler(
             prompt: str,
@@ -245,3 +247,100 @@ class LLMAPIHandlerFactory:
         if llm_key in cls._custom_handlers:
             raise DuplicateCustomLLMProviderError(llm_key)
         cls._custom_handlers[llm_key] = handler
+
+    # @staticmethod
+    # def get_ollama_api_handler(llm_key: str) -> LLMAPIHandler:
+    #     ollama_config = LLMConfigRegistry.get_config(llm_key)
+    #     if not isinstance(ollama_config, LLMConfig):
+    #         raise InvalidLLMConfigError(llm_key)
+
+    #     async def ollama_api_handler(
+    #         prompt: str,
+    #         step: Step | None = None,
+    #         screenshots: list[bytes] | None = None,
+    #         parameters: dict[str, Any] | None = None,
+    #     ) -> dict[str, Any]:
+    #         if parameters is None:
+    #             parameters = LLMAPIHandlerFactory.get_api_parameters()
+
+    #         messages = await llm_messages_builder(prompt, screenshots, ollama_config.add_assistant_prefix)
+
+    #         if step:
+    #             await app.ARTIFACT_MANAGER.create_artifact(
+    #                 step=step,
+    #                 artifact_type=ArtifactType.LLM_PROMPT,
+    #                 data=prompt.encode("utf-8"),
+    #             )
+    #             await app.ARTIFACT_MANAGER.create_artifact(
+    #                 step=step,
+    #                 artifact_type=ArtifactType.LLM_REQUEST,
+    #                 data=json.dumps({
+    #                     "model": ollama_config.model_name,
+    #                     "messages": messages,
+    #                     **parameters,
+    #                 }).encode("utf-8"),
+    #             )
+
+    #         try:
+    #             LOG.info("Calling Ollama API", model=ollama_config.model_name)
+    #             async with httpx.AsyncClient() as client:
+    #                 response = await client.post(
+    #                     f"{ollama_config.base_url}/api/chat",
+    #                     json={
+    #                         "model": ollama_config.model_name,
+    #                         "messages": messages,
+    #                         "stream": False,
+    #                         **parameters,
+    #                     },
+    #                     timeout=SettingsManager.get_settings().LLM_CONFIG_TIMEOUT,
+    #                 )
+    #                 response.raise_for_status()
+    #                 ollama_response = response.json()
+    #             LOG.info("Ollama API call successful", model=ollama_config.model_name)
+
+    #             # Convert Ollama response to a format similar to OpenAI's
+    #             converted_response = {
+    #                 "choices": [{"message": {"content": ollama_response["message"]["content"]}}],
+    #                 "usage": ollama_response.get("usage", {}),
+    #             }
+
+    #             if step:
+    #                 await app.ARTIFACT_MANAGER.create_artifact(
+    #                     step=step,
+    #                     artifact_type=ArtifactType.LLM_RESPONSE,
+    #                     data=json.dumps(converted_response, indent=2).encode("utf-8"),
+    #                 )
+
+    #                 # Note: Ollama might not provide token counts, so we're using fallback values
+    #                 prompt_tokens = ollama_response.get("usage", {}).get("prompt_tokens", 0)
+    #                 completion_tokens = ollama_response.get("usage", {}).get("completion_tokens", 0)
+                    
+    #                 # Note: We don't have a cost calculation for Ollama, so we're setting it to 0
+    #                 await app.DATABASE.update_step(
+    #                     task_id=step.task_id,
+    #                     step_id=step.step_id,
+    #                     organization_id=step.organization_id,
+    #                     incremental_cost=0,
+    #                     incremental_input_tokens=prompt_tokens if prompt_tokens > 0 else None,
+    #                     incremental_output_tokens=completion_tokens if completion_tokens > 0 else None,
+    #                 )
+
+    #             parsed_response = parse_api_response(converted_response, ollama_config.add_assistant_prefix)
+                
+    #             if step:
+    #                 await app.ARTIFACT_MANAGER.create_artifact(
+    #                     step=step,
+    #                     artifact_type=ArtifactType.LLM_RESPONSE_PARSED,
+    #                     data=json.dumps(parsed_response, indent=2).encode("utf-8"),
+    #                 )
+                
+    #             return parsed_response
+
+    #         except httpx.HTTPStatusError as e:
+    #             raise LLMProviderError(llm_key) from e
+    #         except Exception as e:
+    #             LOG.exception("Ollama request failed unexpectedly", model=ollama_config.model_name)
+    #             raise LLMProviderError(llm_key) from e
+
+    #     return ollama_api_handler
+

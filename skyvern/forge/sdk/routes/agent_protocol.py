@@ -51,8 +51,10 @@ from skyvern.forge.sdk.workflow.models.workflow import (
     WorkflowRunStatusResponse,
 )
 from skyvern.forge.sdk.workflow.models.yaml import WorkflowCreateYAMLRequest
+from fastapi.middleware.cors import CORSMiddleware
 
 base_router = APIRouter()
+
 
 LOG = structlog.get_logger()
 

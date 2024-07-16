@@ -24,6 +24,11 @@ class LLMConfigRegistry:
         missing_env_vars = config.get_missing_env_vars()
         if missing_env_vars:
             raise MissingLLMProviderEnvVarsError(llm_key, missing_env_vars)
+    
+    @staticmethod
+    def is_ollama_config(llm_key: str) -> bool:
+        return isinstance(LLMConfigRegistry.get_config(llm_key), LLMConfig)
+
 
     @classmethod
     def register_config(cls, llm_key: str, config: LLMRouterConfig | LLMConfig) -> None:
@@ -50,6 +55,7 @@ if not any(
         SettingsManager.get_settings().ENABLE_ANTHROPIC,
         SettingsManager.get_settings().ENABLE_AZURE,
         SettingsManager.get_settings().ENABLE_BEDROCK,
+        SettingsManager.get_settings().ENABLE_OLLAMA,
     ]
 ):
     raise NoProviderEnabledError()
@@ -178,5 +184,17 @@ if SettingsManager.get_settings().ENABLE_AZURE:
             ],
             supports_vision=True,
             add_assistant_prefix=False,
+        ),
+    )
+    
+if SettingsManager.get_settings().ENABLE_OLLAMA:
+    LLMConfigRegistry.register_config(
+        "OLLAMA_LLAMA2",
+        LLMConfig(
+            model_name="ollama/llama2",
+            required_env_vars=["OLLAMA_BASE_URL"],
+            supports_vision=False,
+            add_assistant_prefix=False,
+            base_url=SettingsManager.get_settings().OLLAMA_BASE_URL,
         ),
     )
