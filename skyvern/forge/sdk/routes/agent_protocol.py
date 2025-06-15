@@ -51,8 +51,10 @@ from skyvern.forge.sdk.workflow.models.workflow import (
     WorkflowRunStatusResponse,
 )
 from skyvern.forge.sdk.workflow.models.yaml import WorkflowCreateYAMLRequest
+from skyvern.forge.sdk.routes.audit import audit_router
 
 base_router = APIRouter()
+base_router.include_router(audit_router, tags=["audit"])
 
 LOG = structlog.get_logger()
 
