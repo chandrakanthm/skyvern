@@ -1,0 +1,107 @@
+{
+  "name": "Sample Company Brand Guidelines",
+  "version": "1.0.0",
+  "colors": [
+    {
+      "name": "primary-blue",
+      "value": "#007bff",
+      "format": "hex",
+      "tolerance": 0.1
+    },
+    {
+      "name": "secondary-gray",
+      "value": "#6c757d",
+      "format": "hex",
+      "tolerance": 0.05
+    },
+    {
+      "name": "success-green",
+      "value": "#28a745",
+      "format": "hex",
+      "tolerance": 0.1
+    },
+    {
+      "name": "danger-red",
+      "value": "#dc3545",
+      "format": "hex",
+      "tolerance": 0.1
+    },
+    {
+      "name": "warning-yellow",
+      "value": "#ffc107",
+      "format": "hex",
+      "tolerance": 0.1
+    },
+    {
+      "name": "info-cyan",
+      "value": "#17a2b8",
+      "format": "hex",
+      "tolerance": 0.1
+    },
+    {
+      "name": "light-gray",
+      "value": "#f8f9fa",
+      "format": "hex",
+      "tolerance": 0.05
+    },
+    {
+      "name": "dark-gray",
+      "value": "#343a40",
+      "format": "hex",
+      "tolerance": 0.05
+    }
+  ],
+  "fonts": [
+    {
+      "name": "primary-sans",
+      "family": "Arial, Helvetica, sans-serif",
+      "allowed_sizes": ["12px", "14px", "16px", "18px", "20px", "24px", "28px", "32px"],
+      "allowed_weights": ["normal", "bold", "400", "600", "700"]
+    },
+    {
+      "name": "heading-serif",
+      "family": "Georgia, Times, serif",
+      "allowed_sizes": ["18px", "20px", "24px", "28px", "32px", "36px", "42px", "48px"],
+      "allowed_weights": ["normal", "bold", "400", "700"]
+    },
+    {
+      "name": "monospace",
+      "family": "Consolas, Monaco, monospace",
+      "allowed_sizes": ["12px", "14px", "16px", "18px"],
+      "allowed_weights": ["normal", "400"]
+    }
+  ],
+  "spacing": [
+    {
+      "name": "margin-standard",
+      "property": "margin",
+      "allowed_values": ["0", "4px", "8px", "12px", "16px", "20px", "24px", "32px", "48px", "64px"]
+    },
+    {
+      "name": "padding-standard",
+      "property": "padding",
+      "allowed_values": ["0", "4px", "8px", "12px", "16px", "20px", "24px", "32px", "48px"]
+    },
+    {
+      "name": "margin-top",
+      "property": "margin-top",
+      "allowed_values": ["0", "8px", "16px", "24px", "32px", "48px"]
+    },
+    {
+      "name": "margin-bottom",
+      "property": "margin-bottom",
+      "allowed_values": ["0", "8px", "16px", "24px", "32px", "48px"]
+    }
+  ],
+  "custom_rules": {
+    "border_radius": ["0", "4px", "8px", "12px", "50%"],
+    "box_shadow": [
+      "none",
+      "0 1px 3px rgba(0,0,0,0.12)",
+      "0 2px 4px rgba(0,0,0,0.1)",
+      "0 4px 8px rgba(0,0,0,0.15)"
+    ],
+    "line_height": ["1", "1.2", "1.4", "1.5", "1.6"],
+    "letter_spacing": ["normal", "0.5px", "1px", "2px"]
+  }
+}
